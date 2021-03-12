@@ -2,7 +2,7 @@
 
 A web application for a school project - Development of a Software Application for Teaching Computer Networking.
 
-<!-- [Try it out here](https://tanxh33.github.io/visualise-dijkstra/). -->
+[Try it out here](https://tanxh33.github.io/visualise-dijkstra-ts/).
 
 This is a mildly refactored version of [this existing repo](https://github.com/tanxh33/visualise-dijkstra), which was written with plain JavaScript.
 
@@ -28,4 +28,4 @@ npm run build
 
 After either of these, you will be able to open and view the index.html file. For convenience, I use [VSCode's Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension.
 
-<!-- Tested on Firefox version 86.0 and Chrome version 88.0.4324.190. -->
+Tested on Firefox version 86.0 and Chrome version 89.0.4389.82.
