@@ -28,4 +28,6 @@ npm run build
 
 After either of these, you will be able to open and view the index.html file. For convenience, I use [VSCode's Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension.
 
+---
+
 Tested on Firefox version 86.0 and Chrome version 89.0.4389.82.
