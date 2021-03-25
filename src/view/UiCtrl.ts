@@ -2,10 +2,10 @@ import { CanvasGraph } from './CanvasGraph';
 import { NodeGrid } from './NodeGrid';
 import { TextDescription } from './TextDescription';
 import { Table } from './Table';
-import { Graph } from './Graph';
+import { GraphUtil } from './GraphUtil';
 import { ButtonHandler } from './ButtonHandler';
 import { uiConfig } from './UiConfig';
-import { initModal, openModal } from './ModalFuncs';
+import { initModal, openModal } from './ModalUtil';
 
 import { GraphStructure, GraphNode, GraphEdge } from '../controller/GraphStructure';
 import { APP_STATES } from '../controller/AppStates';
@@ -17,7 +17,7 @@ export class UICtrl {
   canvasGraph: CanvasGraph;
   nodeGrid: NodeGrid;
   table: Table;
-  graph: Graph;
+  graphUtil: GraphUtil;
   textDescription: TextDescription;
   btnHandler: ButtonHandler;
 
@@ -29,6 +29,7 @@ export class UICtrl {
   addEdgeEnd: string | null = null;
 
   constructor() {
+    // Define relevant element selector strings here to reduce copy/paste
     this.selectors = {
       addNodeBtn: '#add-node-btn',
       addNodeModal: '#add-node-modal',
@@ -61,18 +62,21 @@ export class UICtrl {
       graphTable: '#graph-table'
     };
 
-    this.config = uiConfig;
     this.canvas = document.querySelector('#canvas') !;
+
+    // Instantiate imported classes
+    this.config = uiConfig;
     this.nodeGrid = new NodeGrid();
     this.canvasGraph = new CanvasGraph(this.canvas, this.nodeGrid);
     this.table = new Table(this.selectors.graphTable);
-    this.graph = new Graph();
+    this.graphUtil = new GraphUtil();
     this.textDescription = new TextDescription(this.selectors.textDescription);
     this.btnHandler = new ButtonHandler(this.selectors.runBtn);
   }
 
+  // Invoked in Controller.ts on DOM load
   init = (): void => {
-    // Initialise MaterialCSS instances
+    // Initialise MaterialCSS component instances
     M.Tooltip.init(document.querySelectorAll('.tooltipped'), {
       inDuration: 250,
       outDuration: 150,
@@ -90,7 +94,11 @@ export class UICtrl {
     console.log('UI initialised.');
   }
 
-  drawGraph = (nodes: GraphNode[], edges: GraphEdge[], graphClickHandler: { (e: Event): void }): void => {
+  drawGraph = (
+    nodes: GraphNode[],
+    edges: GraphEdge[],
+    graphClickHandler: { (e: Event): void }
+  ): void => {
     this.canvasGraph.drawGraph(nodes, edges, graphClickHandler);
   }
 
@@ -115,11 +123,11 @@ export class UICtrl {
   }
 
   updateGraph = (graph: GraphStructure, step: AlgoStep): void => {
-    this.graph.updateGraph(graph, step);
+    this.graphUtil.updateGraph(graph, step);
   }
 
   updateGraphLast = (result: GraphNode[]): void => {
-    this.graph.updateGraphLast(result);
+    this.graphUtil.updateGraphLast(result);
   }
 
   darkenButton = (button: Element | string): void => {

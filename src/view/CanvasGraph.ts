@@ -10,11 +10,18 @@ export class CanvasGraph {
     public nodeGrid: NodeGrid
   ) {}
 
-  drawGraph = (nodes: GraphNode[], edges: GraphEdge[], graphClickHandler: { (e: Event): void }): void => {
+  // This function re-draws nodes and edges.
+  // This is invoked whenever we make changes to the nodes and edges.
+  drawGraph = (
+    nodes: GraphNode[],
+    edges: GraphEdge[],
+    graphClickHandler: { (e: Event): void }
+  ): void => {
     const svgns = "http://www.w3.org/2000/svg";
     const group = document.createElementNS(svgns, 'g');
     group.id = 'graph-group';
     this.canvas.appendChild(group);
+    // Is there another way to do this? The handler is defined in Controller.
     group.addEventListener('click', graphClickHandler);
 
     // Draw the edges, then the nodes

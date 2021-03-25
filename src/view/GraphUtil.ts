@@ -1,7 +1,14 @@
+// This class contains utility functions for updating the appearance
+// of nodes and edges in the canvas graph
+
 import { GraphStructure, GraphNode } from '../controller/GraphStructure';
 import { AlgoStep } from '../model/Dijkstra';
 
-export class Graph {
+export class GraphUtil {
+  /**
+   * Contains functions for animating nodes and edges on the canvas
+   * while Dijkstra's algorithm runs, and other utility functions
+   */
   updateGraph = (graph: GraphStructure, step: AlgoStep): void => {
     const { nodes, edges } = graph;
     const { current, state } = step;

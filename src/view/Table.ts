@@ -24,7 +24,7 @@ export class Table {
   }
   
   updateTable = (nodes: GraphNode[], step: AlgoStep, algoStart: GraphNode): void => {
-    // Extract the required data from the dijkstra algo step:
+    // Extract the required data from the dijkstra intermediate algo step:
     const { costFromStartTo, checkList, prevVisited, current, state } = step;
     const priorities: { [key: string]: QueueItem } = {};
     checkList.values.forEach(valPrio => priorities[valPrio.val] = valPrio);
@@ -33,11 +33,12 @@ export class Table {
     tbody.innerHTML = '';
     nodes.forEach((node) => {
       const { id, label } = node;
-      const cost = id === algoStart.id ? 0 : costFromStartTo[id] || Infinity;
-      const priority = priorities[id] ? priorities[id].priority : '';
+      const cost = id === algoStart.id ? 0 : costFromStartTo[id] || Infinity;  // Infinity became null after JSONification
+      const priority = priorities[id] ? priorities[id].priority : '';  // We don't want to show "null" here
       const prevIdStr = prevVisited[id] ? `(#${prevVisited[id]})` : '';
       const prevLabel = prevVisited[id] ? getLabelOfNodeFromId(nodes, prevVisited[id] !) : '';
 
+      // Construct the HTML string for one row (one node)
       const tableRow = document.createElement('tr');
       tableRow.innerHTML = `
         <td>${id}</td>
@@ -46,6 +47,8 @@ export class Table {
         <td>${priority}</td>
         <td>${prevIdStr} ${prevLabel}</td>
       `;
+
+      // Add styling if applicable
       if (current === id) {
         tableRow.classList.add('current-node');
       }

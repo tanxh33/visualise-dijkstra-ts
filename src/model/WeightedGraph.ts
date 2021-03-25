@@ -11,12 +11,23 @@ export interface AdjacencyList {
 };
 
 export class WeightedGraph {
+    /**
+   * Example graph: (node1)--5--(node2)--10--(node3)
+   * {
+   *   1: { 2: 5 },
+   *   2: { 1: 5, 3: 10 },
+   *   3: { 2: 10 }
+   * }
+   */
+
   adjacencyList: AdjacencyList;
 
   constructor() {
     this.adjacencyList = {};
   }
 
+  // Note that JS object keys are always typecasted to strings,
+  // even if numbers are passed in to be keys.
   addNode = (node: string): void => {
     if (!this.adjacencyList[node]) {
       this.adjacencyList[node] = {};

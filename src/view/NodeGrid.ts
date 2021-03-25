@@ -1,6 +1,9 @@
 import { uiConfig } from "./UiConfig";
 
 export class NodeGrid {
+  /** 
+   * The NodeGrid is a set of SVG circles used to 
+   */
   config = uiConfig;
 
   createGrid = (canvas: SVGElement, gridClickHandler: { (e: Event): void }): void => {

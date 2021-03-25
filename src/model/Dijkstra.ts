@@ -10,6 +10,8 @@ import { PriorityQueue } from './PriorityQueue';
 interface State {
   /**
    * algoSteps.state.flag
+   * The "flag" is used to indicate which part of the algorithm the state is describing
+   * 
    * 0: Initialised lists
    * 
    * 1: Top of while-loop
@@ -46,27 +48,45 @@ export interface AlgoStep {
 };
 
 export class Dijkstra {
+  /**
+   * 
+   * Implements Dijkstra's shortest path algorithm using a weighted graph.
+   * An instance of this class is created every time the algorithm is to be run.
+   * Constructor inputs:
+   *   - weighted graph
+   *   - starting node
+   *   - ending node
+   * Properties used as outputs:
+   *   - result: Array containing the nodes that describe the shortest path. Empty array if no solution.
+   *   - algoSteps: Array of intermediate algorithm state, to be drawn on app interface
+   */
+
+  // Three lists required. See AlgoStep above.
   costFromStartTo: { [key: string]: number } = {};
   checkList = new PriorityQueue();
   prevVisited: { [key: string]: string | null } = {};
   current: string | null = null;
 
+  // The final result listing the nodes along the shortest path
   result: string[] = [];
+  // Contains intermediate results of the algorithm, to be displayed on the interface
   algoSteps: AlgoStep[] = [];
 
   constructor(
-    public adjacencyList: AdjacencyList,
-    public start: string,
-    public finish: string
+    public adjacencyList: AdjacencyList,  // graph data structure
+    public start: string,  // starting node
+    public finish: string  // ending node
     ) {
     // Note that JavaScript processes object keys as strings even if they're given integers.
     // Thus start and finish arguments should be passed in as strings.
+
     this.initLists();
   }
 
   initLists = (): void => {
-    // Initialise lists with Infinity and null values
+    // Initialise lists with Infinity and null values for every node
     for (const node in this.adjacencyList) {
+      // Initialise all distances as Infinity except for start node
       if (node === this.start) {
         this.costFromStartTo[node] = 0;
         this.checkList.enqueue(node, 0);
@@ -79,8 +99,9 @@ export class Dijkstra {
   }
 
   run = (): string[] => {
+    // Loop until nothing left in PriorityQueue
     while (this.checkList.values.length) {
-      this.current = this.checkList.values[0].val;  // Read the value first to keep 'priority' in state
+      this.current = this.checkList.values[0].val;  // Read the value first to keep 'priority' in state (this is because of pushState)
 
       this.pushStateToSteps({ flag: 1 });
 
@@ -90,6 +111,7 @@ export class Dijkstra {
         // Solution found
         this.pushStateToSteps({ flag: 6 });
 
+        // Look back through prevVisited from the end to the start node
         while (this.current && this.prevVisited[this.current]) {
           this.result.push(this.current);
           this.pushStateToSteps({ flag: 7, result: JSON.parse(JSON.stringify(this.result)) });
@@ -98,7 +120,7 @@ export class Dijkstra {
 
         this.result.push(this.current !);
         this.pushStateToSteps({ flag: 7, result: JSON.parse(JSON.stringify(this.result)) });
-        this.result = this.result.reverse();
+        this.result = this.result.reverse();  // Flip the list to get start to end order
         break;
 
       } else {
@@ -107,14 +129,15 @@ export class Dijkstra {
           this.pushStateToSteps({ flag: 2, neighbour, costToNeighbour });
 
           if (costToNeighbour < this.costFromStartTo[neighbour]) {
-            // Update list values for the current-neighbour node.
+            // We found a better path from start to the neighbour node, through the current node.
+            // So we update list values for the current-neighbour node.
             this.pushStateToSteps({ flag: 3, neighbour, costToNeighbour });
             this.costFromStartTo[neighbour] = costToNeighbour;
             this.prevVisited[neighbour] = this.current;
             this.checkList.enqueue(neighbour, costToNeighbour);
             this.pushStateToSteps({ flag: 4, neighbour, costToNeighbour });
           } else {
-            // Don't update list values
+            // Existing path is better, don't update list values
             this.pushStateToSteps({ flag: 5, neighbour, costToNeighbour });
           }
         };
@@ -130,6 +153,10 @@ export class Dijkstra {
     return this.result;
   }
 
+  // Utility function, not ideal but it works.
+  // stringify() then parse() is used to make a deep copy of the arrays/objects. Otherwise, we are
+  // only saving pointers to memory, and the UI would render 50 steps of the same thing.
+  // Bad bit: Infinity becomes null
   pushStateToSteps = (state: State) => {
     this.algoSteps.push({
       costFromStartTo: JSON.parse(JSON.stringify(this.costFromStartTo)),

@@ -1,4 +1,7 @@
 export class ButtonHandler {
+  /**
+   * Contains utility functions such as enabling and disabling buttons
+   */
   constructor(public runBtn: string) {}
 
   darkenButton = (button: Element | string): void => {
