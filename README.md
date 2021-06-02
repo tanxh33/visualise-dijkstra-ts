@@ -16,6 +16,8 @@ This application lets you:
 
 <img src="./img/app-1280.png" width="360">
 
+Project report permalink: https://hdl.handle.net/10356/149518
+
 ---
 ## About the code
 This is a mildly refactored version of [this existing repo](https://github.com/tanxh33/visualise-dijkstra), which was written with plain JavaScript.
@@ -58,5 +60,4 @@ After either of these, you will be able to open and view the index.html file. Fo
 
 
 ---
-
 Tested on Firefox version 86.0 and Chrome version 89.0.4389.82.
